@@ -1,0 +1,79 @@
+{%extends 'base.html'%}
+<!DOCTYPE html>
+
+<html lang="en">  
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% block head %}  
+    <title>Document</title>
+    {% endblock %}
+{%block body%}
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+}
+
+</style>
+</head>
+<body>
+</head>
+<body>
+    <table style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ตำแหน่ง</th>
+                <th>ตำแหน่ง ป.เอก</th>
+                <th>ชื่อ</th>
+                <th>นามสกุล</th>
+                <th>คุณวุติ</th>
+                <th>ความเชี่ยวชาญ</th>
+                <th>สถานที่ติดต่อ</th>
+                <th>มหาวิทยาลัย</th>
+                <th>สาขาวิชา</th>
+                <th>โทร</th>
+                <th>email</th>
+                <th>สถานะ</th>
+            </tr>
+        </thead>
+    <tbody>
+        {% for item in item%}
+           <tr>
+              <td>
+                  <a href="{% url 'edit' pk=item.id%}">
+                  {{item.id}}
+                  </a>
+                </td>
+            
+            <td>{{item.rank}}</td>
+            <td>{{item.phd}}</td>
+            <td>{{item.firstname}}</td>                   
+            <td>{{item.lastname}}</td>
+            <td>{{item.edu}}</td>
+            <td>{{item.spc}}</td>
+            <td>{{item.contact}}</td>
+            <td>{{item.uni}}</td>
+            <td>{{item.field}}</td>
+            <td>{{item.tel}}</td>
+            <td>{{item.email}}</td>
+            <td>{{item.status}}</td>
+            
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</body>
+
+</html>
+<div class='btn'>
+        <a href="back" class="btn btn-primary btn-sm">Back</a>
+        </div>
+
+
+{%endblock%}
