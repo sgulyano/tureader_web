@@ -10,8 +10,8 @@
     <title>Document</title>
     {% endblock %}
 {%block body%}
-
 <style>
+  
 table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
@@ -23,14 +23,15 @@ th, td {
 </style>
 </head>
 <body>
-  <h5 align="center" >
-    รายชื่อผู้ทรงคุณวุติ
-  </h5>
+    <h5 align="center" >
+        รายชื่อผู้ทรงคุณวุติ
+      </h5>
 </head>
 <body>
     <table style="width:100%">
         <thead>
             <tr>
+                
                 <th>ตำแหน่ง</th>
                 <th>ตำแหน่ง ป.เอก</th>
                 <th>ชื่อ</th>
@@ -43,14 +44,14 @@ th, td {
                 <th>โทร</th>
                 <th>email</th>
                 <th>สถานะ</th>
+                <th></th>
             </tr>
         </thead>
     <tbody>
         {% for item in item%}
            <tr>
-           
+              
             
-
             <td>{{item.rank}}</td>
             <td>{{item.phd}}</td>
             <td>{{item.firstname}}</td>                   
@@ -63,6 +64,11 @@ th, td {
             <td>{{item.tel}}</td>
             <td>{{item.email}}</td>
             <td>{{item.status}}</td>
+            <td>
+            <a href="{% url 'edit' pk=item.id%}" class='btn btn-primary'>
+              แก้ไข
+              </a>
+            </td>
             
           </tr>
         {% endfor %}
@@ -72,7 +78,8 @@ th, td {
 
 </html>
 <div class='btn'>
-    <a href="/edit" class="btn btn-primary btn-sm">Edit</a>
-    </div>
+        <a href="back" class="btn btn-primary ">Back</a>
+        </div>
+
 
 {%endblock%}
