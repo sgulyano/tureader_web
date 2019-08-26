@@ -9,5 +9,6 @@ urlpatterns = [
     path('edit/<int:pk>',views.edit,name='edit'),
     path('edit/back',views.index,name ='index'),
     path('pdf',GeneratePDF.as_view()),
-    path('search/',views.search.as_view(),name='search')
+    path('search/',views.search.as_view(),name='search'),
+    path('add/',views.add_item,name='add_item')
 ] 

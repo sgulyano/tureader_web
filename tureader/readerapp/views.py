@@ -27,6 +27,18 @@ def edit(request,pk):
     context['form'] = form
     return render (request,'readerapp/edit.html',context)
 
+def add_item(request):
+    context = dict()
+    if request.method=='POST':
+        form= ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+    else:
+        form= ItemForm()
+    context['form']=form
+
+    return render(request,'readerapp/additem.html',context)
+
 def editpage(request):
     context = dict()
     context['item']= Reader.objects.all()
