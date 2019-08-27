@@ -25,3 +25,5 @@ source virtualenv_name/bin/activate
 ```
 pip install -r requirements.txt
 ```
+
+Edited by Chayapone 
