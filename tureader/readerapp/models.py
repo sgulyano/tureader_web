@@ -13,6 +13,7 @@ class Reader(models.Model):
     tel = models.TextField()
     email = models.EmailField()
     status = models.CharField(max_length=100)
+    spc_field = models.TextField()
+    source = models.CharField(max_length=100)
     def __str__(self):
         return self.firstname+' '+self.lastname
-

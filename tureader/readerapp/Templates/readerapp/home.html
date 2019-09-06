@@ -38,13 +38,16 @@ th, td {
                 <th>นามสกุล</th>
                 <th>คุณวุติ</th>
                 <th>ความเชี่ยวชาญ</th>
+                <th>สาขาความเชี่ยวชาญ</th>
                 <th>สถานที่ติดต่อ</th>
                 <th>มหาวิทยาลัย</th>
                 <th>สาขาวิชา</th>
                 <th>โทร</th>
                 <th>email</th>
                 <th>สถานะ</th>
-                <th></th>
+                <th>ที่มา</th>
+                <th>แก้ไข</th>
+                
             </tr>
         </thead>
     <tbody>
@@ -58,12 +61,14 @@ th, td {
             <td>{{item.lastname}}</td>
             <td>{{item.edu}}</td>
             <td>{{item.spc}}</td>
+            <td>{{item.spc_field}}</td>
             <td>{{item.contact}}</td>
             <td>{{item.uni}}</td>
             <td>{{item.field}}</td>
             <td>{{item.tel}}</td>
             <td>{{item.email}}</td>
             <td>{{item.status}}</td>
+            <td>{{item.source}}</td>
             <td>
             <a href="{% url 'edit' pk=item.id%}" class='btn btn-primary'>
               แก้ไข
