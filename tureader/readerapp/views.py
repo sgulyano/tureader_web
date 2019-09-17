@@ -7,12 +7,17 @@ from django.views.generic import View,ListView
 from .utils import render_to_pdf
 from django.template.loader import get_template
 from .filters import ReaderFilter
-
+from django.core.paginator import Paginator
 
 def index(request):
-    context = dict()
-    context['item']= Reader.objects.all()
-    return render(request,'readerapp/home.html',context)
+    context= Reader.objects.all()
+    page = request.GET.get('page',1)
+    paginator = Paginator(context,50)
+    page = request.GET.get('page')
+    text = paginator.get_page(page)
+    return render(request,'readerapp/home.html',{'text':text})
+
+
 def test (request):
     return render(request,'readerapp/test.html')
 
@@ -37,7 +42,7 @@ def add_item(request):
         form= ItemForm()
     context['form']=form
 
-    return render(request,'readerapp/additem.html',context)
+    return render(request,'readerapp/edit.html',context)
 
 def editpage(request):
     context = dict()

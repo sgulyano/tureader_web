@@ -28,10 +28,10 @@ th, td {
       </h5>
 </head>
 <body>
-    <table style="width:20%">
+    <table style="width:100%">
         <thead>
             <tr>
-                
+                <th>ลำดับที่</th>
                 <th>ตำแหน่ง</th>
                 <th>ตำแหน่ง ป.เอก</th>
                 <th>ชื่อ</th>
@@ -51,10 +51,10 @@ th, td {
             </tr>
         </thead>
     <tbody>
-        {% for item in item%}
+        {% for item in text%}
            <tr>
               
-            
+           <td>{{item.id}}</td>
             <td>{{item.rank}}</td>
             <td>{{item.phd}}</td>
             <td>{{item.firstname}}</td>                   
@@ -82,9 +82,24 @@ th, td {
 </body>
 
 </html>
-<div class='btn'>
-  <a href="/add" class="btn btn-primary btn-sm">Add</a>
-  </div>
+<div class="pagination">
+  <span class="step-links">
+      {% if text.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ text.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+          Page {{ text.number }} of {{ text.paginator.num_pages }}.
+      </span>
+
+      {% if text.has_next %}
+          <a href="?page={{ text.next_page_number }}">next</a>
+          <a href="?page={{ text.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+  </span>
+</div>
+<a href="/add" class='btn btn-primary'>add</a>
 
 
 {%endblock%}
