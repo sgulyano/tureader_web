@@ -13,24 +13,41 @@
 <style>
   
 table, th, td {
-  border: 1px solid black;
+  border: 2.225px solid rgb(0, 0, 0);
   border-collapse: collapse;
 }
-th, td {
+th{
   padding: 15px;
+}
+ td {
+  padding: 15px;
+
+}
+img {
+  max-width: 25%;
 }
 
 </style>
 </head>
 <body>
-    <h5 align="center" >
-        รายชื่อผู้ทรงคุณวุติ
-      </h5>
+  <style type="text/css">
+   body { background: #fbebe7 !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+</style>
+
+
+<div class="container mt-4" align="center" >
+  {% load static %}
+  <img src="{% static "readerapp/tu.png" %}" class="img-responsive"> 
+</div>
+
+    <h3 class='mt-5' align="center"  >
+        รายชื่อผู้ทรงคุณวุฒิ
+      </h3>
 </head>
 <body>
-    <table style="width:100%">
-        <thead>
-            <tr>
+    <table style="width:98%" class='ml-3 mt-4'>
+        <thead >
+            <tr class="bg-warning">
                 <th>ลำดับที่</th>
                 <th>ตำแหน่ง</th>
                 <th>ตำแหน่ง ป.เอก</th>
@@ -38,21 +55,16 @@ th, td {
                 <th>นามสกุล</th>
                 <th>คุณวุติ</th>
                 <th>ความเชี่ยวชาญ</th>
-                <th>สาขาความเชี่ยวชาญ</th>
-                <th>สถานที่ติดต่อ</th>
                 <th>มหาวิทยาลัย</th>
                 <th>สาขาวิชา</th>
-                <th>โทร</th>
-                <th>email</th>
                 <th>สถานะ</th>
                 <th>ที่มา</th>
-                <th>แก้ไข</th>
                 
             </tr>
         </thead>
     <tbody>
         {% for item in text%}
-           <tr>
+           <tr >
               
            <td>{{item.id}}</td>
             <td>{{item.rank}}</td>
@@ -61,19 +73,10 @@ th, td {
             <td>{{item.lastname}}</td>
             <td>{{item.edu}}</td>
             <td>{{item.spc}}</td>
-            <td>{{item.spc_field}}</td>
-            <td>{{item.contact}}</td>
             <td>{{item.uni}}</td>
             <td>{{item.field}}</td>
-            <td>{{item.tel}}</td>
-            <td>{{item.email}}</td>
             <td>{{item.status}}</td>
             <td>{{item.source}}</td>
-            <td>
-            <a href="{% url 'edit' pk=item.id%}" class='btn btn-primary'>
-              แก้ไข
-              </a>
-            </td>
             
           </tr>
         {% endfor %}
@@ -82,24 +85,27 @@ th, td {
 </body>
 
 </html>
-<div class="pagination">
+<div class="container" align='center' >
   <span class="step-links">
       {% if text.has_previous %}
-          <a href="?page=1">&laquo; first</a>
-          <a href="?page={{ text.previous_page_number }}">previous</a>
+          <a href="?page=1" class="btn btn-success mt-4">&laquo; first</a>
+          <a href="?page={{ text.previous_page_number }}" class="btn btn-success mt-4 ">previous</a>
       {% endif %}
-
-      <span class="current">
+    
+      <span class="badge badge-light" >
+ 
           Page {{ text.number }} of {{ text.paginator.num_pages }}.
+ 
       </span>
 
       {% if text.has_next %}
-          <a href="?page={{ text.next_page_number }}">next</a>
-          <a href="?page={{ text.paginator.num_pages }}">last &raquo;</a>
+          <a href="?page={{ text.next_page_number }}" class="btn btn-success mt-4 ">next</a>
+          <a href="?page={{ text.paginator.num_pages }}" class="btn btn-success mt-4 ">last &raquo;</a>
+  
       {% endif %}
   </span>
 </div>
-<a href="/add" class='btn btn-primary'>add</a>
+
 
 
 {%endblock%}
