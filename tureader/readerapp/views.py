@@ -10,7 +10,24 @@ from .filters import ReaderFilter
 from django.core.paginator import Paginator
 
 def index(request):
-    context= Reader.objects.all()
+    search_term = ''
+    if 'search' in request.GET:
+        search_term = request.GET['search']
+        column=request.GET['column']
+        if column =='ชื่อจริง':
+            context = Reader.objects.all().filter(firstname__icontains=search_term) 
+        elif column =='นามสกุล':
+            context = Reader.objects.all().filter(lastname__icontains=search_term) 
+        elif column =='มหาวิทยาลัย':
+            context = Reader.objects.all().filter(uni__icontains=search_term) 
+        elif column =='สาขาวิชา':
+            context = Reader.objects.all().filter(field__icontains=search_term) 
+        elif column =='ตำแหน่ง':
+            context = Reader.objects.all().filter(rank__icontains=search_term) 
+        elif column =='ตำแหน่ง ป.เอก':
+            context = Reader.objects.all().filter(phd__icontains=search_term) 
+    elif 'search'not in request.GET:        
+        context= Reader.objects.all()
     page = request.GET.get('page',1)
     paginator = Paginator(context,50)
     page = request.GET.get('page')
@@ -28,7 +45,7 @@ def edit(request,pk):
     if request.method =='POST':
         form = ItemForm(request.POST,request.FILES,instance=item)
         if form.is_valid():
-            form.save()
+            form.save()  
     context['form'] = form
     return render (request,'readerapp/edit.html',context)
 
