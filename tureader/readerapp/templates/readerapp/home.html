@@ -34,6 +34,13 @@ img {
    body { background: #fbebe7 !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
 </style>
 
+<div  align='right'> 
+  <a href="\admin" class="btn btn-outline-success mr-3 mt-3">Admin</a>
+
+
+
+
+</div>
 
 <div class="container mt-4" align="center" >
   {% load static %}
@@ -49,9 +56,9 @@ img {
 
 <form class="form-inline my-2 my-lg-0 " >
   <a href="\" class="btn btn-outline-success my-2 my-sm-0 ml-3 ">Home</a>
-  <div class="container" align='center' ></div>
+  <div class="container" align='right' >
   <label for="colorSelect"></label>
-  <select  type="text"  name="column">
+  <select class='btn' type="text"  name="column">
       <option selected>ชื่อจริง</option>
       <option>นามสกุล</option>
       <option>มหาวิทยาลัย</option>
@@ -59,9 +66,10 @@ img {
       <option>ตำแหน่ง</option>
       <option>ตำแหน่ง ป.เอก</option>
   </select>
-  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" >
-  <button class="btn btn-outline-success my-2 my-sm-0 pull-right" type="submit">Search</button>
+  <input class="form-control " type="search" placeholder="Search" aria-label="Search" name="search" >
+  <button class="btn btn-outline-success" type="submit">Search</button>
 </div>  
+</form>
 </form>
 
 
