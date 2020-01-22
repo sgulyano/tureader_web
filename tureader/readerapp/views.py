@@ -4,12 +4,16 @@ from .models import Reader
 from . import templates
 from .forms import ItemForm
 from django.views.generic import View,ListView
-from .utils import render_to_pdf
 from django.template.loader import get_template
 from .filters import ReaderFilter
 from django.core.paginator import Paginator
+import xlwt
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 
+text_download=[]
 def index(request):
+    global text_download
     search_term = ''
     if 'search' in request.GET:
         search_term = request.GET['search']
@@ -32,62 +36,98 @@ def index(request):
     paginator = Paginator(context,50)
     page = request.GET.get('page')
     text = paginator.get_page(page)
+    text_download=text
     return render(request,'readerapp/home.html',{'text':text})
 
 
-def test (request):
-    return render(request,'readerapp/test.html')
 
-def edit(request,pk):
-    context = dict()
-    item=Reader.objects.get(pk=pk)
-    form = ItemForm(instance=item)
-    if request.method =='POST':
-        form = ItemForm(request.POST,request.FILES,instance=item)
-        if form.is_valid():
-            form.save()  
-    context['form'] = form
-    return render (request,'readerapp/edit.html',context)
 
-def add_item(request):
-    context = dict()
-    if request.method=='POST':
-        form= ItemForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-    else:
-        form= ItemForm()
-    context['form']=form
 
-    return render(request,'readerapp/edit.html',context)
 
-def editpage(request):
-    context = dict()
-    context['item']= Reader.objects.all()
-    return render(request,'readerapp/editpage.html',context)
+
+def export_page_xls(request):
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="Reader.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Users')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['ตำแหน่งทางวิชาการ', 'ตำแหน่ง ป.เอก','ชื่อ','สกุล','คุณวุฒิ','ความเชี่ยวชาญ','สถานที่ติดต่อ','มหาวิทยาลัย','สาขาวิชา','โทร.','อีเมล','สถานะ','สาขาวิชาตาม ก.พ.อ.','แหล่งที่มา']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = text_download
+    for row in rows:
+        row_num += 1
+        ws.write(row_num, 0, row.rank, font_style)
+        ws.write(row_num, 1, row.phd, font_style)
+        ws.write(row_num, 2, row.firstname, font_style)
+        ws.write(row_num, 3, row.lastname, font_style)
+        ws.write(row_num, 4, row.edu, font_style)
+        ws.write(row_num, 5, row.spc, font_style)
+        ws.write(row_num, 6, row.contact, font_style)
+        ws.write(row_num, 7, row.uni, font_style)
+        ws.write(row_num, 8, row.field, font_style)
+        ws.write(row_num, 9, row.tel, font_style)
+        ws.write(row_num, 10, row.email, font_style)
+        ws.write(row_num, 11, row.status, font_style)
+
+    wb.save(response)
+    return response
+
+def export_all_xls(request):
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="Reader.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Users')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['ตำแหน่งทางวิชาการ', 'ตำแหน่ง ป.เอก','ชื่อ','สกุล','คุณวุฒิ','ความเชี่ยวชาญ','สถานที่ติดต่อ','มหาวิทยาลัย','สาขาวิชา','โทร.','อีเมล','สถานะ','สาขาวิชาตาม ก.พ.อ.','แหล่งที่มา']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = Reader.objects.all()
+    for row in rows:
+        row_num += 1
+        ws.write(row_num, 0, row.rank, font_style)
+        ws.write(row_num, 1, row.phd, font_style)
+        ws.write(row_num, 2, row.firstname, font_style)
+        ws.write(row_num, 3, row.lastname, font_style)
+        ws.write(row_num, 4, row.edu, font_style)
+        ws.write(row_num, 5, row.spc, font_style)
+        ws.write(row_num, 6, row.contact, font_style)
+        ws.write(row_num, 7, row.uni, font_style)
+        ws.write(row_num, 8, row.field, font_style)
+        ws.write(row_num, 9, row.tel, font_style)
+        ws.write(row_num, 10, row.email, font_style)
+        ws.write(row_num, 11, row.status, font_style)
+
+    wb.save(response)
+    return response
     
 
 
 
-
-class GeneratePDF(View):
-    def get(self,request,*agrs,**kwargs):
-        template= get_template('readerapp/invioce.html')
-        context = dict()
-        context['item']= Reader.objects.all()
-        html = template.render(context)
-        pdf = render_to_pdf('readerapp/invioce.html',context)
-        return HttpResponse(pdf,content_type='application/pdf')
-
-
-class search(ListView):
-    model = Reader
-    template_name= 'readerapp/filter.html'
-   
-
-    def get_context_data(self,**kwargs):
-        context = dict()
-        context['item']= Reader.objects.all()
-
-        context['filter']=ReaderFilter(self.request.GET,queryset=self.get_queryset())
-        return context
+    

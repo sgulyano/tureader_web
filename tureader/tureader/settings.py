@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'readerapp.apps.ReaderappConfig',
     'django_filters',
     'bootstrapform',
+    'django_extensions'
 
 
 ]
