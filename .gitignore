@@ -6,3 +6,5 @@ tureader/readerapp/management/commands/__pycache__/
 tureader/res/__pycache__/
 
 tureader/res/.ipynb_checkpoints/
+
+staticfiles
