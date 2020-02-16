@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 import xlwt
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 text_download=[]
 def index(request):
@@ -23,9 +24,11 @@ def index(request):
         elif column =='นามสกุล':
             context = Reader.objects.all().filter(lastname__icontains=search_term) 
         elif column =='มหาวิทยาลัย':
-            context = Reader.objects.all().filter(uni__icontains=search_term) 
+            context = Reader.objects.all().filter(uni__name__icontains=search_term) 
         elif column =='สาขาวิชา':
-            context = Reader.objects.all().filter(field__icontains=search_term) 
+            context = Reader.objects.all().filter(field__icontains=search_term)
+        elif column =='สาขาวิชาตาม ก.พ.อ.':
+            context = Reader.objects.all().filter(Q(spc_field__name__icontains=search_term) | Q(spc_field__code__icontains=search_term)).distinct()
         elif column =='ตำแหน่ง':
             context = Reader.objects.all().filter(rank__icontains=search_term) 
         elif column =='ตำแหน่ง ป.เอก':
@@ -77,11 +80,16 @@ def export_page_xls(request):
         ws.write(row_num, 4, row.edu, font_style)
         ws.write(row_num, 5, row.spc, font_style)
         ws.write(row_num, 6, row.contact, font_style)
-        ws.write(row_num, 7, row.uni, font_style)
+        ws.write(row_num, 7, row.uni.name, font_style)
         ws.write(row_num, 8, row.field, font_style)
         ws.write(row_num, 9, row.tel, font_style)
         ws.write(row_num, 10, row.email, font_style)
         ws.write(row_num, 11, row.status, font_style)
+        spc = []
+        for t in row.spc_field.all():
+            spc.append(t.code + " " + t.name)
+        ws.write(row_num, 12, ';'.join(spc), font_style)
+        ws.write(row_num, 13, row.source, font_style)
 
     wb.save(response)
     return response
@@ -118,11 +126,16 @@ def export_all_xls(request):
         ws.write(row_num, 4, row.edu, font_style)
         ws.write(row_num, 5, row.spc, font_style)
         ws.write(row_num, 6, row.contact, font_style)
-        ws.write(row_num, 7, row.uni, font_style)
+        ws.write(row_num, 7, row.uni.name, font_style)
         ws.write(row_num, 8, row.field, font_style)
         ws.write(row_num, 9, row.tel, font_style)
         ws.write(row_num, 10, row.email, font_style)
         ws.write(row_num, 11, row.status, font_style)
+        spc = []
+        for t in row.spc_field.all():
+            spc.append(t.code + " " + t.name)
+        ws.write(row_num, 12, ';'.join(spc), font_style)
+        ws.write(row_num, 13, row.source, font_style)
 
     wb.save(response)
     return response
