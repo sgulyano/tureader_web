@@ -18,12 +18,18 @@ class Command(BaseCommand):
         acafield = pd.read_excel(field_list, dtype='str')
         acafield.dropna(how='all', inplace=True)
         acafield.fillna('', inplace=True)
+
+        cnt = 0
         for index, row in acafield.iterrows():
-            af = AcademicField(code=row['รหัส'],
-                    name = row['ชื่อสาขา'],
-                    engname = row['ชื่อสาขา (ภาษาอังกฤษ)'],
-                    category = row['หมวดหมู่'])
-            af.save()
+            _, created = AcademicField.objects.update_or_create(
+                code=row['รหัส'],
+                name = row['ชื่อสาขา'],
+                engname = row['ชื่อสาขา (ภาษาอังกฤษ)'],
+                category = row['หมวดหมู่'])
+            if not created:
+                print(row['ชื่อสาขา'])
+            cnt += created
+        print(f'Add new {cnt}/{len(acafield.index)} academica fields')
 
         # read a list of university names from a dict we prepared
         print('--- Reading University Names from ' + uni_list + ' ---')
@@ -31,55 +37,55 @@ class Command(BaseCommand):
         unis.dropna(how='all', inplace=True)
         unis.fillna('', inplace=True)
 
+        cnt = 0
         for index, row in unis.iterrows():
-            u = University(name = row['ชื่อ'],
-                    engname = row['ชื่ออังกฤษ'],
-                    nameabbr = row['ชื่อย่อ'],
-                    engnameabbr = row['ชื่อย่ออังกฤษ'])
-            u.save()
+            _, created = University.objects.update_or_create(
+                name = row['ชื่อ'],
+                engname = row['ชื่ออังกฤษ'],
+                nameabbr = row['ชื่อย่อ'],
+                engnameabbr = row['ชื่อย่ออังกฤษ'])
+            cnt += created
+        print(f'Add new {cnt}/{len(unis.index)} universities')
 
         # read a list of readers
         print('--- Reading Reader List from ' + options['name_list'][0] + ' ---')
-        a=pd.read_csv(options['name_list'][0])
-        a.dropna(how='all', inplace=True)
-        a=a.fillna('-')
+        readers = pd.read_csv(options['name_list'][0])
+        readers.dropna(how='all', inplace=True)
+        readers.fillna('-', inplace=True)
 
-        for i in range(len(a.index)):
-            A=[]
-            
-            for j in a.loc[i]:
-                A.append(j)
-
-
-            
-
+        cnt = 0
+        for index, row in readers.iterrows():
             try:
-                uni_i = University.objects.get(name=A[5])
+                uni_i = University.objects.get(name=row['มหาวิทยาลัย'])
             except University.DoesNotExist:
-                print(i)
-                print(A[5])
+                print(index)
+                print(row['มหาวิทยาลัย'])
                 continue
 
-            
             if uni_i == None:
-                print(i)
-                print(A[5])
+                print('A')
+                print(index)
+                print(row['มหาวิทยาลัย'])
                 continue
 
-            p = Reader(rank=A[0],
-            phd=A[1],
-            firstname=A[2],
-            lastname=A[3],
-            edu=A[4],
-            spc=A[7],
-            contact=A[8],
-            uni=uni_i,#A[5],
-            field=A[6],
-            tel=A[9],
-            email=A[10],
-            status=A[11],
-            source=A[12])
-            p.save()
+            _, created = Reader.objects.update_or_create(
+                rank=row['ตำแหน่ง'],
+                phd=row['ตำแหน่ง ป.เอก'],
+                title=row['คำนำหน้านาม'],
+                firstname=row['ชื่อ'],
+                lastname=row['นามสกุล'],
+                edu=row['คุณวุฒิ'],
+                field=row['สาขาวิชา'],
+                spc=row['ความเชี่ยวชาญ'],
+                contact=row['สถานที่ติดต่อ'],
+                uni=uni_i,#A[5],
+                tel=row['โทร'],
+                email=row['email'],
+                status=row['สถานะ'],
+                source=row['แหล่งที่มา'])
+
+            cnt += created
+        print(f'Add new {cnt}/{len(readers.index)} records')
         
 
 

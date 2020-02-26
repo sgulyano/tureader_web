@@ -19,6 +19,7 @@ class AcademicField(models.Model):
 class Reader(models.Model):
     rank = models.CharField('ตำแหน่งทางวิชาการ', max_length=100, default='-')
     phd = models.CharField('ตำแหน่ง ป.เอก', max_length=100)
+    title = models.CharField('คำนำหน้านาม', max_length=100, default='-')
     firstname = models.CharField('ชื่อ', max_length=100)
     lastname = models.CharField('สกุล', max_length=100)
     edu = models.TextField('คุณวุฒิ')
