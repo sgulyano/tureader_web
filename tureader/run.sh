@@ -2,8 +2,6 @@
 
 cd tureader
 
-python manage.py flush --no-input
-
 python manage.py makemigrations readerapp --no-input
 python manage.py migrate --no-input
 
