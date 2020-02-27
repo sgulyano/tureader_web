@@ -1,5 +1,17 @@
-python manage.py makemigrations readerapp
-python manage.py migrate
+#!/bin/sh
+
+cd tureader
+
+python manage.py flush --no-input
+
+python manage.py makemigrations readerapp --no-input
+python manage.py migrate --no-input
+
 python manage.py load res/readerlist.csv 
-python manage.py createsuperuser
-python manage.py collectstatic
+python manage.py collectstatic --no-input --clear
+
+rm -rf /code/tureader/res
+
+cd ..
+
+exec "$@"
