@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 import pandas as pd
 from readerapp.models import Reader, University, AcademicField
+import os
 
 class Command(BaseCommand):
 
@@ -8,8 +9,8 @@ class Command(BaseCommand):
         parser.add_argument('name_list', nargs='+',type=str)
         
     def handle(self, *args, **options):
-        uni_list = 'res/universitylist.xlsx'
-        field_list = 'res/academicfieldname.xlsx'
+        uni_list = os.path.join(os.getcwd(), 'res/universitylist.xlsx')
+        field_list = os.path.join(os.getcwd(), 'res/academicfieldname.xlsx')
 
         print(options['name_list'][0])
         
