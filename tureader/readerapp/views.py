@@ -6,11 +6,14 @@ from .forms import ItemForm
 from django.views.generic import View,ListView
 from django.template.loader import get_template
 from .filters import ReaderFilter
-from django.core.paginator import Paginator
+# from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import xlwt
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.db.models import Q
+
+
 
 text_download=[]
 def index(request):
@@ -38,7 +41,15 @@ def index(request):
     page = request.GET.get('page',1)
     paginator = Paginator(context,50)
     page = request.GET.get('page')
-    text = paginator.get_page(page)
+    # text = paginator.get_page(page)
+    
+    try:
+        text = paginator.page(page)
+    except PageNotAnInteger:
+        text = paginator.page(1)
+    except EmptyPage:
+        text = paginator.page(paginator.num_pages)
+
     text_download=text
     return render(request,'readerapp/home.html',{'text':text})
 
